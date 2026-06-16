@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group One | Enterprise Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --bg-primary: #f8fafc;
+            --bg-surface: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --success: #10b981;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR COMPONENT */
+        aside {
+            width: var(--sidebar-width);
+            background-color: #0f172a;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            left: 0;
+            top: 0;
+        }
+
+        .sidebar-brand {
+            padding: 24px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #38bdf8;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 24px 16px;
+            flex-grow: 1;
+        }
+
+        .sidebar-item a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #94a3b8;
+            padding: 12px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-item.active a, .sidebar-item a:hover {
+            color: #ffffff;
+            background-color: #1e293b;
+        }
+
+        /* MAIN CONTENT AREA CONTAINER */
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0; /* Prevents flex items from breaking layout width */
+        }
+
+        /* APP TOP HEADER */
+        header {
+            background-color: var(--bg-surface);
+            padding: 18px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        header h1 {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: block;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .logout-btn {
+            color: var(--danger);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .logout-btn:hover {
+            background-color: #fef2f2;
+        }
+
+        /* MAIN VIEWPORT */
+        main {
+            padding: 32px;
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        /* METRIC GRID CARDS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background-color: var(--bg-surface);
+            padding: 24px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stat-details h4 {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .stat-details span {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .icon-blue { background-color: #eff6ff; color: #2563eb; }
+        .icon-green { background-color: #ecfdf5; color: #10b981; }
+
+        /* DATA TABLE AND CONTROLS LAYOUT */
+        .panel {
+            background-color: var(--bg-surface);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 32px;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-header h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+        }
+
+        /* TABLES STYLE PRESETS */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background-color: #f8fafc;
+            color: var(--text-muted);
+            padding: 14px 24px;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-color);
+            color: #334155;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: #fcfdfe;
+        }
+
+        /* BADGES FOR STATUS */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .badge-success { background-color: #d1fae5; color: #065f46; }
+        .badge-pill { background-color: #f1f5f9; color: #334155; }
+
+        /* BUTTON RE-ENGINEERING */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary { background-color: var(--primary); color: white; }
+        .btn-primary:hover { background-color: var(--primary-hover); }
+        
+        .btn-outline { background-color: transparent; border: 1px solid var(--border-color); color: var(--text-main); }
+        .btn-outline:hover { background-color: var(--bg-primary); }
+
+        .btn-sm { padding: 6px 12px; font-size: 0.8rem; border-radius: 4px; }
+        .btn-danger-sm { background-color: #fef2f2; color: var(--danger); }
+        .btn-danger-sm:hover { background-color: var(--danger); color: white; }
+
+        /* CONTROL ACTIONS WRAPPER */
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 24px;
+        }
+
+        .control-card {
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .control-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        footer {
+            margin-top: auto;
+            padding: 24px 32px;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--bg-surface);
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-layer-group"></i> Group One Base
+        </div>
+        <ul class="sidebar-menu">
+            <li class="sidebar-item active">
+                <a href="#"><i class="fa-solid fa-chart-pie"></i> Dashboard</a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#"><i class="fa-solid fa-users"></i> Users</a>
+            </li>
+            <li class="sidebar-item">
+                <a href="#"><i class="fa-solid fa-sliders"></i> System Settings</a>
+            </li>
+        </ul>
+    </aside>
+
+    <div class="main-wrapper">
+        
+        <header>
+            <h1>Capstone Dashboard Workspace</h1>
+            <div class="user-profile">
+                <div class="user-info">
+                    <span class="user-name">Primary Admin</span>
+                    <span class="user-role">Group 1 System Lead</span>
+                </div>
+                <a href="#" class="logout-btn">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </a>
+            </div>
+        </header>
+
+        <main>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-details">
+                        <h4>Total Registered Users</h4>
+                        <span>1,240</span>
+                    </div>
+                    <div class="stat-icon icon-blue">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-details">
+                        <h4>Active Sessions</h4>
+                        <span>42</span>
+                    </div>
+                    <div class="stat-icon icon-blue">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-details">
+                        <h4>System Engine Status</h4>
+                        <div>
+                            <span class="badge badge-success"><i class="fa-solid fa-circle-check"></i> Operational</span>
+                        </div>
+                    </div>
+                    <div class="stat-icon icon-green">
+                        <i class="fa-solid fa-server"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <h3>System User Directory Management</h3>
+                    <button class="btn btn-primary btn-sm"><i class="fa-solid fa-plus"></i> Create Record</button>
+                </div>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Full Name</th>
+                                <th>Primary Email Route</th>
+                                <th>Assigned Permission</th>
+                                <th style="text-align: right;">Action Configuration</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>#001</strong></td>
+                                <td>Dipesh Giri</td>
+                                <td>dipeshgiri@mail.com</td>
+                                <td><span class="badge badge-pill">Administrator</span></td>
+                                <td style="text-align: right;">
+                                    <button class="btn btn-outline btn-sm">Edit</button>
+                                    <button class="btn btn-outline btn-sm btn-danger-sm">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>#002</strong></td>
+                                <td>Bhupen Budhathoki</td>
+                                <td>BhupenBudhathoki@mail.com</td>
+                                <td><span class="badge badge-pill">Admin 2</span></td>
+                                <td style="text-align: right;">
+                                    <button class="btn btn-outline btn-sm">Edit</button>
+                                    <button class="btn btn-outline btn-sm btn-danger-sm">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>#003</strong></td>
+                                <td>Aashish Aale</td>
+                                <td>AashishAale@mail.com</td>
+                                <td><span class="badge badge-pill">Admin 3</span></td>
+                                <td style="text-align: right;">
+                                    <button class="btn btn-outline btn-sm">Edit</button>
+                                    <button class="btn btn-outline btn-sm btn-danger-sm">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>#004</strong></td>
+                                <td>Sagar Khatri</td>
+                                <td>Sagarkhatri@mail.com</td>
+                                <td><span class="badge badge-pill">Admin 4</span></td>
+                                <td style="text-align: right;">
+                                    <button class="btn btn-outline btn-sm">Edit</button>
+                                    <button class="btn btn-outline btn-sm btn-danger-sm">Delete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <h3>Administrative Infrastructure Utilities</h3>
+                </div>
+                <div class="control-grid">
+                    <div class="control-card">
+                        <h4>User Base Enrollment</h4>
+                        <p>Manually initialize and configure credentials for new platform consumers and customer profiles.</p>
+                        <button class="btn btn-primary" type="button"><i class="fa-solid fa-user-plus"></i> Add New User</button>
+                    </div>
+
+                    <div class="control-card">
+                        <h4>Telemetry & Transaction Logs</h4>
+                        <p>Export absolute data metrics detailing daily operations, user traffic volumes, and sales metrics.</p>
+                        <button class="btn btn-outline" type="button"><i class="fa-solid fa-download"></i> Download System Logs</button>
+                    </div>
+
+                    <div class="control-card">
+                        <h4>Database Disaster Recovery</h4>
+                        <p>Initiate cloud repository mirror sequence and download snapshots of the latest node states.</p>
+                        <button class="btn btn-outline" type="button"><i class="fa-solid fa-database"></i> Backup Database</button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <footer>
+            <span>&copy; 2026 Admin Workspace Center | Capstone Core Group 1</span>
+            <span>Version 1.0.0 (Production Build)</span>
+        </footer>
+    </div>
+
+</body>
+</html>
