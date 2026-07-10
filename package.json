@@ -1,0 +1,17 @@
+{
+  "name": "group-one-core-workspace",
+  "version": "1.0.0",
+  "description": "Enterprise Admin Dashboard Core System",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.3.1",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "helmet": "^7.1.0",
+    "cors": "^2.8.5"
+  }
+}
