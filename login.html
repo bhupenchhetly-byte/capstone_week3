@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group One | Secure Portal Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-surface: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --primary: #38bdf8;
+            --primary-hover: #0ea5e9;
+            --danger: #ef4444;
+            --border-color: #334155;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .login-card {
+            background-color: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            padding: 40px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+            justify-content: center;
+        }
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 32px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .input-wrapper i {
+            position: absolute;
+            left: 14px;
+            color: var(--text-muted);
+        }
+        .input-wrapper input {
+            width: 100%;
+            padding: 12px 14px 12px 42px;
+            background-color: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: white;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .input-wrapper input:focus {
+            border-color: var(--primary);
+        }
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary);
+            color: #0f172a;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 10px;
+        }
+        .btn-submit:hover { background-color: var(--primary-hover); }
+        .error-banner {
+            background-color: rgba(239, 68, 68, 0.15);
+            border: 1px solid var(--danger);
+            color: #fca5a5;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="brand">
+            <i class="fa-solid fa-layer-group"></i> Group One Base
+        </div>
+        <div class="subtitle">Capstone Enterprise Core Authentication</div>
+
+        <div class="error-banner" id="errorBanner">
+            <i class="fa-solid fa-circle-exclamation"></i> <span id="errorText">Invalid configuration execution.</span>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Primary Email Route</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input type="email" id="email" required placeholder="admin@group1.com">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Security Access Key</label>
+                <div class="input-wrapper">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="password" required placeholder="••••••••">
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit">Verify Credentials</button>
+        </form>
+    </div>
+
+    <script>
+        // Automatic Seed Engine for Local Core Database Setup
+        const seedUsers = [
+            { id: "usr_001", name: "Primary Admin", email: "admin@group1.com", password: "AdminPassCore2026", role: "Group 1 System Lead" },
+            { id: "usr_002", name: "Dipesh Giri", email: "dipeshgiri@mail.com", password: "DipeshSecure2026", role: "Administrator" },
+            { id: "usr_003", name: "Bhupen Budhathoki", email: "bhupenbudhathoki@mail.com", password: "BhupenShield#1", role: "Admin 2" },
+            { id: "usr_004", name: "Aashish Aale", email: "aashishaale@mail.com", password: "AashishMatrix88", role: "Admin 3" },
+            { id: "usr_005", name: "Sagar Khatri", email: "sagarkhatri@mail.com", password: "SagarSecure2026", role: "Admin 4" },
+            { id: "usr_006", name: "Roshan Maharjan", email: "roshanmaharjan@mail.com", password: "RoshanSecure2026", role: "Admin 5" },
+            { id: "usr_007", name: "Dibash Dhamala", email: "dibashdhamala@mail.com", password: "DibashSecure2026", role: "Admin 6" }
+        ];
+
+        if (!localStorage.getItem('local_user_directory')) {
+            localStorage.setItem('local_user_directory', JSON.stringify(seedUsers));
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const emailInput = document.getElementById('email').value.trim().toLowerCase();
+            const passwordInput = document.getElementById('password').value;
+            const banner = document.getElementById('errorBanner');
+            const errorText = document.getElementById('errorText');
+
+            const users = JSON.parse(localStorage.getItem('local_user_directory'));
+            const matchedUser = users.find(u => u.email.toLowerCase() === emailInput && u.password === passwordInput);
+
+            if (matchedUser) {
+                localStorage.setItem('sys_token', 'mock_jwt_handshake_trusted_' + Math.random().toString(36).substr(2));
+                localStorage.setItem('sys_user', JSON.stringify({ name: matchedUser.name, role: matchedUser.role }));
+                window.location.href = 'admin.html';
+            } else {
+                errorText.innerText = "Security Handshake Denied: Invalid credentials.";
+                banner.style.display = 'flex';
+            }
+        });
+    </script>
+</body>
+</html>

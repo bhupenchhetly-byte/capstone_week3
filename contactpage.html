@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Group One | Contact Messages</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --sidebar-width: 260px;
+            --bg-primary: #f8fafc;
+            --bg-surface: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --border-color: #e2e8f0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            display: flex;
+            min-height: 100vh;
+        }
+        aside {
+            width: var(--sidebar-width);
+            background-color: #0f172a;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            left: 0; top: 0; z-index: 10;
+        }
+        .sidebar-brand {
+            padding: 24px; font-size: 1.1rem; font-weight: 700;
+            letter-spacing: 0.5px; border-bottom: 1px solid #1e293b;
+            display: flex; align-items: center; gap: 10px; color: #38bdf8;
+        }
+        .sidebar-menu { list-style: none; padding: 24px 16px; flex-grow: 1; }
+        .sidebar-item a {
+            display: flex; align-items: center; gap: 12px; color: #94a3b8;
+            padding: 12px; text-decoration: none; border-radius: 6px;
+            font-weight: 500; transition: all 0.2s ease; margin-bottom: 4px;
+        }
+        .sidebar-item.active a, .sidebar-item a:hover { color: #ffffff; background-color: #1e293b; }
+        .main-wrapper { margin-left: var(--sidebar-width); flex-grow: 1; display: flex; flex-direction: column; min-width: 0; }
+        header { background-color: var(--bg-surface); padding: 18px 32px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
+        header h1 { font-size: 1.3rem; font-weight: 600; }
+        main { padding: 32px; max-width: 1400px; width: 100%; }
+        .panel { background-color: var(--bg-surface); border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 32px; overflow: hidden; padding: 24px; }
+        .panel-header { margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 14px; }
+        .panel-header h3 { font-size: 1.05rem; font-weight: 600; }
+        .form-body { display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group label { font-size: 0.85rem; font-weight: 500; }
+        .form-group input, .form-group textarea { padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 6px; font-size: 0.9rem; outline: none; }
+        .form-group textarea { height: 120px; resize: vertical; }
+        .btn-primary { background-color: var(--primary); color: white; border: none; padding: 10px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary:hover { background-color: var(--primary-hover); }
+        footer { margin-top: auto; padding: 24px 32px; border-top: 1px solid var(--border-color); background-color: var(--bg-surface); display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+
+    <aside>
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-layer-group"></i> Group One Base
+        </div>
+        <ul class="sidebar-menu">
+            <li class="sidebar-item"><a href="admin.html"><i class="fa-solid fa-chart-pie"></i> Dashboard</a></li>
+            <li class="sidebar-item active"><a href="#"><i class="fa-solid fa-envelope"></i> Contact Messages</a></li>
+        </ul>
+    </aside>
+
+    <div class="main-wrapper">
+        <header>
+            <h1>Contact Gateway Dispatcher</h1>
+        </header>
+
+        <main>
+            <div class="panel">
+                <div class="panel-header"><h3>Inbound Communications</h3></div>
+                <p style="color: var(--text-muted); font-size: 0.9rem;">Operational node channel to log manually captured triage tickets directly into database storage memory grids.</p>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header"><h3>Submit a Message</h3></div>
+                <div class="form-body">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" placeholder="Enter your full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" placeholder="Enter your email address">
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message Payload</label>
+                        <textarea id="message" placeholder="Write your message here..."></textarea>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-primary" onclick="alert('Message captured and synchronized successfully.')">
+                        <i class="fa-solid fa-paper-plane"></i> Send Message
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <span>&copy; 2026 Admin Workspace Center | Capstone Core Group 1</span>
+            <span>Version 1.0.0 (Production Build)</span>
+        </footer>
+    </div>
+
+    <script>
+        // Token Safeguard Verification
+        if (!localStorage.getItem('sys_token')) window.location.href = 'login.html';
+    </script>
+</body>
+</html>
