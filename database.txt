@@ -1,1 +1,16 @@
+CAPSTONE DATABASE
 
+User 1
+Name: Admin
+Email: admin@example.com
+Role: Administrator
+
+User 2
+Name: John
+Email: john@example.com
+Role: User
+
+User 3
+Name: Sarah
+Email: sarah@example.com
+Role: Manager
