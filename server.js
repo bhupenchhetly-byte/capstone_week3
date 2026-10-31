@@ -177,9 +177,48 @@ app.get('/api/reports/telemetry-csv', authenticateToken, (req, res) => {
 // --- SUPPORT TICKETS ---
 app.post('/api/support/ticket', (req, res) => {
   const { name, email, message } = req.body || {};
-  if (!name || !email || !message) return res.status(400).json({ error: 'Name, email and message are required.' });
-  if (!EMAIL_RE.test(String(email))) return res.status(400).json({ error: 'A valid email is required.' });
-  if (String(message).length > 2000) return res.status(400).json({ error: 'Message is too long (max 2000 characters).' });
+
+  const cleanName = String(name || '').trim();
+  const cleanEmail = String(email || '').trim().toLowerCase();
+  const cleanMessage = String(message || '').trim();
+
+  if (!cleanName || !cleanEmail || !cleanMessage) {
+    return res.status(400).json({
+      error: 'Name, email and message are required.'
+    });
+  }
+
+  if (cleanName.length > 100) {
+    return res.status(400).json({
+      error: 'Name must not exceed 100 characters.'
+    });
+  }
+
+  if (!EMAIL_RE.test(cleanEmail)) {
+    return res.status(400).json({
+      error: 'A valid email is required.'
+    });
+  }
+
+  if (cleanMessage.length > 2000) {
+    return res.status(400).json({
+      error: 'Message is too long (max 2000 characters).'
+    });
+  }
+
+  const result = db.prepare(
+    'INSERT INTO support_tickets (name, email, message) VALUES (?, ?, ?)'
+  ).run(cleanName, cleanEmail, cleanMessage);
+
+  const ticket = db.prepare(
+    'SELECT * FROM support_tickets WHERE id = ?'
+  ).get(Number(result.lastInsertRowid));
+
+  res.status(201).json({
+    success: true,
+    payload: ticket
+  });
+});
 
   const result = db.prepare('INSERT INTO support_tickets (name, email, message) VALUES (?, ?, ?)')
     .run(String(name).trim(), String(email).trim(), String(message).trim());
