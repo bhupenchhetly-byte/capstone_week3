@@ -220,12 +220,6 @@ app.post('/api/support/ticket', (req, res) => {
   });
 });
 
-  const result = db.prepare('INSERT INTO support_tickets (name, email, message) VALUES (?, ?, ?)')
-    .run(String(name).trim(), String(email).trim(), String(message).trim());
-  const ticket = db.prepare('SELECT * FROM support_tickets WHERE id = ?').get(Number(result.lastInsertRowid));
-  res.status(201).json({ success: true, payload: ticket });
-});
-
 app.get('/api/support/tickets', authenticateToken, (req, res) => {
   res.json(db.prepare('SELECT * FROM support_tickets ORDER BY id DESC').all());
 });
